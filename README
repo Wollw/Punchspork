@@ -1,0 +1,2 @@
+You need to add your Punchfork API key to "api_key-sample.xml"
+and save it to "res/values/api_key.xml" before building.
