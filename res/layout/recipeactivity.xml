@@ -7,30 +7,33 @@
     >
 	<ImageView
 		android:id="@+id/thumb"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
 		android:onClick="openURL"
 		android:gravity="center_horizontal"
 		/>
 	<TextView  
 		android:id="@+id/title"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:textSize="12sp"
 	    android:text="Title"
 		android:gravity="center_horizontal"
-	    />
+		/>
+	<TextView
+		android:id="@+id/rating"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textSize="30sp"
+		android:text="0"
+		android:gravity="center_horizontal"
+		/>
 	<TextView  
 		android:id="@+id/source_name"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:textSize="12sp"
 	    android:text="Source"
 		android:gravity="center_horizontal"
-	    />
-	<TextView  
-		android:id="@+id/rating"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:text="Rating"
-		android:gravity="center_horizontal"
-	    />
+		/>
 </LinearLayout>

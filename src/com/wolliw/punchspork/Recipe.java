@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import org.json.JSONObject;
 import org.json.JSONArray;
 
+import java.text.DecimalFormat;
 import java.io.InputStream;
 import java.net.URL;
 
@@ -14,7 +15,7 @@ import java.net.URL;
 *	recipe from Punchfork
 */
 public class Recipe {
-	private double rating;
+	private Double rating;
 	private String source_name;
 	private String thumb;
 	private String title;
@@ -57,7 +58,7 @@ public class Recipe {
 	public String getThumb() {
 		return thumb;
 	}
-	public double getRating() {
+	public Double getRating() {
 		return rating;
 	}
 	public String getSourceName() {

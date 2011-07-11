@@ -70,9 +70,9 @@ public class Punchspork extends Activity
 		Log.d("Punchspork",api_key);
 		String url = "http://api.punchfork.com/recipes?key="
 			+api_key
-			+"&q="
-			+query;
-		// Remove spaces from url
+			+"&q="+query
+			+"&count="+getString(R.string.qry_count);
+		// fix spaces in url for query
 		String patternStr = " ";
 		String replaceStr = "%20";
 		Pattern pattern = Pattern.compile(patternStr);

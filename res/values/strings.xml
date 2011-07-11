@@ -2,4 +2,5 @@
 <resources>
     <string name="app_name">Punchspork</string>
 	<string name="search_hint">Search recipes</string>
+	<string name="searchbtn">Search</string>
 </resources>
