@@ -45,14 +45,29 @@ public class RecipeActivity extends Activity
 		try {
 			iv = (ImageView) this.findViewById(R.id.thumb);
 			iv.setImageDrawable(thumbnail(extras.getString("thumb")));
+		} catch (Exception e) {
+			Log.e("Punchspork","Error displaying recipe image.");
+		}
+
+		try {
 			tv = (TextView) this.findViewById(R.id.title);
 			tv.setText(extras.getString("title"));
+		} catch (Exception e) {
+			Log.e("Punchspork","Error displaying recipe title.");
+		}
+
+		try {
 			tv = (TextView) this.findViewById(R.id.source_name);
 			tv.setText(extras.getString("source_name"));
+		} catch (Exception e) {
+			Log.e("Punchspork","Error displaying recipe source name.");
+		}
+
+		try {
 			tv = (TextView) this.findViewById(R.id.rating);
 			tv.setText(Double.toString(extras.getDouble("rating")));
 		} catch (Exception e) {
-			Log.e("Punchspork","Error displaying recipe info.");
+			Log.e("Punchspork","Error displaying recipe title.");
 		}
 
 	}
