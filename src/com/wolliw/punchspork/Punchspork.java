@@ -34,10 +34,15 @@ public class Punchspork extends Activity
 	private ImageView iv;
 	private ListView lv;
 
+	private Bundle extras;
+
 	private String query;
+	private String cursor;
 
 	private Recipe recipe;
 	private String[] recipes;
+
+	private Boolean lastPage;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -46,13 +51,15 @@ public class Punchspork extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.search);
 
-/*		Bundle extras = getIntent().getExtras();
+
+		extras = getIntent().getExtras();
 		if (extras != null) {
-			query = extras.getString("QUERY");
+			query = extras.getString("query");
+			cursor = extras.getString("cursor");
 		} else {
-			query = "";
+			cursor = "";
 		}
-*/
+
 
 		Intent intent = getIntent();
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -71,7 +78,8 @@ public class Punchspork extends Activity
 		String url = "http://api.punchfork.com/recipes?key="
 			+api_key
 			+"&q="+query
-			+"&count="+getString(R.string.qry_count);
+			+"&count="+getString(R.string.qry_count)
+			+"&cursor="+cursor;
 		// fix spaces in url for query
 		String patternStr = " ";
 		String replaceStr = "%20";
@@ -87,14 +95,34 @@ public class Punchspork extends Activity
 		try {
 			pfQuery = new JSONObject(data);
 			if (pfQuery.getInt("count") != 0) {
+				Log.d("Punchspork", "Building List");
 				pfRecipes = new JSONArray(pfQuery.getString("recipes"));
-				recipes = new String[pfQuery.getInt("count")];
+
+				// Add extra place for "More" button we aren't
+				// showing all the results
+				if (pfQuery.getString("next_cursor").equals(""))
+					lastPage = true;
+				else
+					lastPage = false;
+				
+				if (lastPage) {
+					recipes = new String[pfQuery.getInt("count")];
+				} else {
+					recipes = new String[pfQuery.getInt("count")+1];
+				}
+
 				// Built array of recipes
 				for (int i = 0; i < pfQuery.getInt("count"); i++) {
-					Log.d("Punchspork", "Setting Recipe: "+Integer.toString(i));
 					recipe = new Recipe((JSONObject)pfRecipes.get(i));
 					recipes[i] = recipe.getTitle();
 				}
+
+				// Button for getting more results
+				if (!lastPage) {
+					Log.d("Punchspork", "Adding 'More' button to list");
+					recipes[recipes.length-1] = new String("More...");
+				}
+
 			}	else	{
 				recipe = null;
 				recipes = null;
@@ -106,18 +134,35 @@ public class Punchspork extends Activity
 
 		if (recipes != null) {
 			lv = (ListView)findViewById(R.id.resultsList);
+
+			Log.d("Punchspork", "Giving ListView array of recipes");
 			lv.setAdapter(
 				new ArrayAdapter<String>(
 					this, R.layout.result_item, recipes));
 			lv.setTextFilterEnabled(true);
 
+			// Change style of "More" button
+			/*if (!lastPage) {
+				ListAdapter la = lv.getAdapter();
+				String s = la.getItem(recipes.length-1).getText();
+				Log.d("Punchspork", s);
+			}*/
+
+			Log.d("Punchspork", "Setting OnItemClickListener");
 			lv.setOnItemClickListener(new OnItemClickListener() {
 				public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
 					try {
-						recipe = new Recipe((JSONObject)
-							pfRecipes.get(position));
-						showRecipe(recipe);
+						if (position
+								>= new Integer(
+									getString(
+									R.string.qry_count))) {
+							nextPage(query,pfQuery.getString("next_cursor"));
+						} else {
+							recipe = new Recipe((JSONObject)
+											pfRecipes.get(position));
+							showRecipe(recipe);
+						}
 					} catch (Exception e) {
 					}
 				}
@@ -133,6 +178,14 @@ public class Punchspork extends Activity
 		Intent i = new Intent(Intent.ACTION_VIEW);
 		i.setData(Uri.parse("http://www.punchfork.com"));
 		startActivity(i);
+	}
+
+	/** Load next page of results */
+	public void nextPage(String q, String c) {
+        Intent i = new Intent(this,Punchspork.class);
+        i.putExtra("query", q);
+        i.putExtra("cursor", c);
+        startActivity(i);
 	}
 
 	/** Load Recipe Activity*/

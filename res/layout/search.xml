@@ -14,15 +14,4 @@
 		android:id="@+id/resultsList"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"/>
-	<LinearLayout
-		android:orientation="horizontal"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content">
-		<Button
-			android:id="@+id/searchbtn"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:layout_alignParentBottom="true"
-			android:text="@string/searchbtn" />
-	</LinearLayout>
 </LinearLayout>

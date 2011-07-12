@@ -39,7 +39,6 @@ public class Recipe {
 			pf_url = "Error";
 			Log.e("Punchspork","Recipe JSON malformed");
 		}
-		Log.d("Punchfork","Done setting recipe info");
 	}
 
 	
