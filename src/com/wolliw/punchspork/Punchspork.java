@@ -51,22 +51,22 @@ public class Punchspork extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.search);
 
-
-		extras = getIntent().getExtras();
-		if (extras != null) {
-			query = extras.getString("query");
-			cursor = extras.getString("cursor");
-		} else {
-			cursor = "";
-		}
-
+		cursor = "";
+		query = "";
 
 		Intent intent = getIntent();
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 			query = intent.getStringExtra(SearchManager.QUERY);
-		} else {
-			query = "";
 		}
+
+		extras = getIntent().getExtras();
+		if (extras != null) {
+			if (extras.getString("query") != null)
+				query = extras.getString("query");
+			if (extras.getString("cursor") != null)
+				cursor = extras.getString("cursor");
+		}
+
 
 
 		//onSearchRequested();
@@ -94,13 +94,15 @@ public class Punchspork extends Activity
 		/* get the recipe array */
 		try {
 			pfQuery = new JSONObject(data);
+			Log.d("Punchspork", data);
 			if (pfQuery.getInt("count") != 0) {
 				Log.d("Punchspork", "Building List");
 				pfRecipes = new JSONArray(pfQuery.getString("recipes"));
 
 				// Add extra place for "More" button we aren't
 				// showing all the results
-				if (pfQuery.getString("next_cursor").equals(""))
+				if (pfQuery.getString("next_cursor").equals("")
+					|| pfQuery.getInt("count") < new Integer(getString(R.string.qry_count)))
 					lastPage = true;
 				else
 					lastPage = false;
